@@ -18,21 +18,17 @@ export default class HashMap {
 
   set(key, value) {
     const hashCode = this.hash(key);
+    // const bucket = this.buckets[hashCode];
 
-    console.log(hashCode)
-
-    // check if key already exists
+    // check if bucket is already populated
     if(this.buckets[hashCode]){
-        // same hashCode
-        console.log(this.buckets[hashCode])
-        if (this.buckets[hashCode].key === key){
-            console.log("COLLISION")
-        } else {
-            console.log("diff keys")
-        }
+        // populated
     } else {
-        // does not exist
-        this.buckets[hashCode] = [key, value];
+        // not populated
+        const obj = {}
+        obj[key] = value;
+        this.buckets[hashCode] = obj;
     }
+
   }
 }
