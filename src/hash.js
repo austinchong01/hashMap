@@ -42,10 +42,9 @@ export default class HashMap {
     this.loadFactor = this.numElements / this.capacity;
     if (this.loadFactor >= 0.75) {
       // increase capacity
+      console.log(this.loadFactor)
       // this.capacity *= 2;
     }
-
-    console.log(this.buckets[hashCode].toString());
   }
 
   get(key) {
@@ -68,18 +67,66 @@ export default class HashMap {
   remove(key) {
     const hashCode = this.hash(key);
     if (this.buckets[hashCode]) {
-      if (this.buckets[hashCode].remove(key)){
+      if (this.buckets[hashCode].remove(key)) {
         console.log(this.buckets[hashCode].toString());
+        this.numElements -= 1;
+        this.loadFactor = this.numElements / this.capacity;
         return true;
       }
     }
     return false;
   }
 
-  // entries() {
-  //   const entries = []
-  //   for (let i = 0; i < this.buckets.length; i += 1){
-  //     const element = [];
-  //   }
-  // }
+  length() {
+    return this.numElements;
+  }
+
+  clear() {
+    this.loadFactor = 0;
+    this.numElements = 0;
+    this.capacity = 16;
+    this.buckets = [];
+  }
+
+  keys() {
+    const keys = [];
+    for (let i = 0; i < this.buckets.length; i += 1) {
+      if (!this.buckets[i]) continue;
+      let node = this.buckets[i].head;
+      while (node) {
+        keys.push(node.key);
+        node = node.nextNode;
+      }
+    }
+    return keys;
+  }
+
+  values() {
+    const values = [];
+    for (let i = 0; i < this.buckets.length; i += 1) {
+      if (!this.buckets[i]) continue;
+      let node = this.buckets[i].head;
+      while (node) {
+        values.push(node.value);
+        node = node.nextNode;
+      }
+    }
+    return values;
+  }
+
+  entries() {
+    const entries = [];
+    for (let i = 0; i < this.buckets.length; i += 1) {
+      if (!this.buckets[i]) continue;
+      let node = this.buckets[i].head;
+      while (node) {
+        let pair = [];
+        pair.push(node.key);
+        pair.push(node.value);
+        entries.push(pair);
+        node = node.nextNode;
+      }
+    }
+    return entries;
+  }
 }
