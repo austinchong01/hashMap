@@ -30,44 +30,56 @@ export default class HashMap {
       // bucket exists
       if (!this.buckets[hashCode].contains(key)) {
         // add to linked list if no key exists
-        this.buckets[hashCode].append(key, value)
+        this.buckets[hashCode].append(key, value);
       } else {
         // overwrite value
-        this.buckets[hashCode].replace(key, value)
+        this.buckets[hashCode].replace(key, value);
       }
     }
 
     // change load factor
     this.numElements += 1;
     this.loadFactor = this.numElements / this.capacity;
-    if (this.loadFactor >= 0.75){
+    if (this.loadFactor >= 0.75) {
       // increase capacity
       // this.capacity *= 2;
     }
 
-    console.log(this.buckets[hashCode].toString())
+    console.log(this.buckets[hashCode].toString());
   }
 
   get(key) {
     const hashCode = this.hash(key);
-    if (!this.buckets[hashCode]) {
-      return null;
-    } else {
-      const node = this.buckets[hashCode].find(key)
-
-      if (node) return node.value
-      else return null;
+    if (this.buckets[hashCode]) {
+      const node = this.buckets[hashCode].find(key);
+      if (node) return node.value;
     }
+    return null;
   }
 
   has(key) {
-
-  }
-
-  entries() {
-    const entries = []
-    for (let i = 0; i < this.buckets.length; i += 1){
-      const element = [];
+    const hashCode = this.hash(key);
+    if (this.buckets[hashCode]) {
+      if (this.buckets[hashCode].contains(key)) return true;
     }
+    return false;
   }
+
+  remove(key) {
+    const hashCode = this.hash(key);
+    if (this.buckets[hashCode]) {
+      if (this.buckets[hashCode].remove(key)){
+        console.log(this.buckets[hashCode].toString());
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // entries() {
+  //   const entries = []
+  //   for (let i = 0; i < this.buckets.length; i += 1){
+  //     const element = [];
+  //   }
+  // }
 }

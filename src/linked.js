@@ -108,7 +108,7 @@ export default class LinkedList {
     let node = this.head;
     while (node) {
       if (node.key === key) {
-        return node
+        return node;
       }
       node = node.nextNode;
     }
@@ -125,6 +125,32 @@ export default class LinkedList {
       }
       node = node.nextNode;
     }
+  }
+
+  remove(key) {
+    if (!this.head) return null;
+    if (this.length === 1) {
+      this.head = null;
+      this.length = 0;
+      return true;
+    }
+
+    // length of at least two
+    let prev = null;
+    let node = this.head;
+
+    while (node) {
+      if (node.key === key) {
+        if (node === this.head)
+          this.head = node.nextNode;
+        else
+          prev.nextNode = node.nextNode;
+        return true;
+      }
+      prev = node;
+      node = node.nextNode;
+    }
+    return false;
   }
 
   toString() {
