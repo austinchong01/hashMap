@@ -34,6 +34,7 @@ export default class HashMap {
       } else {
         // overwrite value
         this.buckets[hashCode].replace(key, value);
+        this.numElements -= 1;
       }
     }
 
@@ -42,8 +43,8 @@ export default class HashMap {
     this.loadFactor = this.numElements / this.capacity;
     if (this.loadFactor >= 0.75) {
       // increase capacity
-      console.log(this.loadFactor)
-      // this.capacity *= 2;
+      this.capacity *= 2;
+      this.reload();
     }
   }
 
@@ -68,7 +69,6 @@ export default class HashMap {
     const hashCode = this.hash(key);
     if (this.buckets[hashCode]) {
       if (this.buckets[hashCode].remove(key)) {
-        console.log(this.buckets[hashCode].toString());
         this.numElements -= 1;
         this.loadFactor = this.numElements / this.capacity;
         return true;
@@ -84,7 +84,6 @@ export default class HashMap {
   clear() {
     this.loadFactor = 0;
     this.numElements = 0;
-    this.capacity = 16;
     this.buckets = [];
   }
 
@@ -128,5 +127,20 @@ export default class HashMap {
       }
     }
     return entries;
+  }
+
+  reload() {
+    const copiedBuckets = [...this.buckets];
+    this.clear();
+    for (let i = 0; i < copiedBuckets.length; i += 1) {
+      if (!copiedBuckets[i]) continue;
+      let node = copiedBuckets[i].head;
+      while (node) {
+        const key = node.key;
+        const value = node.value;
+        this.set(key, value);
+        node = node.nextNode;
+      }
+    }
   }
 }
