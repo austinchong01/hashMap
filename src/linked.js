@@ -104,15 +104,27 @@ export default class LinkedList {
   }
 
   find(key) {
-    // return index of node, or null
+    // return node, or null
     let node = this.head;
-    for (let i = 0; i < this.length; i += 1) {
+    while (node) {
       if (node.key === key) {
-        return i;
+        return node
       }
       node = node.nextNode;
     }
     return null;
+  }
+
+  replace(key, newValue) {
+    let node = this.head;
+
+    while (node) {
+      if (node.key === key) {
+        node.value = newValue;
+        return;
+      }
+      node = node.nextNode;
+    }
   }
 
   toString() {
